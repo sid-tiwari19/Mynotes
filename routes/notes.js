@@ -60,7 +60,7 @@ router.put("/updatenote/:id", fetchuser, async (req, res) => {
     if (description) {
       newNote.description = description;
     }
-    if (tag) {
+    if (tag.length) {
       newNote.tag = tag;
     }
 

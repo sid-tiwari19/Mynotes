@@ -112,4 +112,44 @@ router.post("/getuser", fetchuser, async (req, res) => {
   }
 });
 
+// ROUTE 4: Change Password
+router.post("/changepass", fetchuser, async (req, res) => {
+  try {
+    let success = false;
+    const userId = req.user.id;
+    const user = await User.findById(userId);
+    const { oldpassword, newpassword } = req.body;
+    if (newpassword.length < 8) {
+      return res
+        .status(400)
+        .json({ success, error: "Passoword must have minimum 8 characters" });
+    }
+    if (oldpassword === newpassword)
+      return res.status(400).json({
+        success,
+        error: "New password must be different than old password",
+      });
+    if (!user) {
+      return res.status(400).json({ success, error: "Invalid credentials!" });
+    }
+    // check if password matches
+    const passwordCompare = await bcrypt.compare(oldpassword, user.password);
+    if (!passwordCompare) {
+      return res.status(400).json({ success, error: "Invalid credentials!" });
+    }
+    const salt = await bcrypt.genSalt(10); // Generate a salt value
+    const secPass = await bcrypt.hash(newpassword, salt);
+    user.password = secPass;
+    await user.save();
+
+    // Password updated successfully
+    return res
+      .status(200)
+      .json({ success: true, message: "Password updated successfully!" });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Some error occurred");
+  }
+});
+
 module.exports = router;
