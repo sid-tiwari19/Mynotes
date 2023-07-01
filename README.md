@@ -5,7 +5,8 @@ This is the backend of the project Mynotes
 Techs/libraries/skills used-> MongoDB,expressjs,Nodejs,bcrypt,jwt
 
 Has two models-> users:storing user data,notes:storing user notes
-routes-> authentication: login,signup,changepassword,get logged in user data, notes: CRUD operation of notes
+Routes-> authentication: login,signup,changepassword,get logged in user data, notes: CRUD operation of notes
+Middleware -> to authenticate using auth token
 
 Signup->
 checks for data validation,consitency
